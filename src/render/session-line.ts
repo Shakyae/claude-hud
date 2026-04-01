@@ -142,7 +142,7 @@ export function renderSessionLine(ctx: RenderContext): string {
   }
 
   // Usage limits display (shown when enabled in config, respects usageThreshold)
-  if (display?.showUsage !== false && ctx.usageData && !providerLabel) {
+  if (display?.showUsage !== false && ctx.usageData && providerLabel !== 'Bedrock') {
     if (isLimitReached(ctx.usageData)) {
       const resetTime = ctx.usageData.fiveHour === 100
         ? formatResetTime(ctx.usageData.fiveHourResetAt)

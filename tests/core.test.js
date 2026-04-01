@@ -283,6 +283,52 @@ test('bedrock model detection recognizes bedrock ids', () => {
   assert.equal(getProviderLabel({ model: { id: 'claude-3-5-sonnet-20241022' } }), null);
 });
 
+test('getProviderLabel returns MiniMax when ANTHROPIC_BASE_URL contains minimaxi', () => {
+  const saved = process.env.ANTHROPIC_BASE_URL;
+  try {
+    process.env.ANTHROPIC_BASE_URL = 'https://api.minimaxi.com/v1';
+    assert.equal(getProviderLabel({ model: { id: 'claude-3-5-sonnet-20241022' } }), 'MiniMax');
+  } finally {
+    restoreEnvVar('ANTHROPIC_BASE_URL', saved);
+  }
+});
+
+test('getProviderLabel returns MiniMax when ANTHROPIC_API_BASE_URL contains minimaxi', () => {
+  const savedBase = process.env.ANTHROPIC_BASE_URL;
+  const savedApiBase = process.env.ANTHROPIC_API_BASE_URL;
+  try {
+    delete process.env.ANTHROPIC_BASE_URL;
+    process.env.ANTHROPIC_API_BASE_URL = 'https://api.minimaxi.com/v1';
+    assert.equal(getProviderLabel({ model: { id: 'claude-3-5-sonnet-20241022' } }), 'MiniMax');
+  } finally {
+    restoreEnvVar('ANTHROPIC_BASE_URL', savedBase);
+    restoreEnvVar('ANTHROPIC_API_BASE_URL', savedApiBase);
+  }
+});
+
+test('getProviderLabel returns null without MiniMax env vars', () => {
+  const savedBase = process.env.ANTHROPIC_BASE_URL;
+  const savedApiBase = process.env.ANTHROPIC_API_BASE_URL;
+  try {
+    delete process.env.ANTHROPIC_BASE_URL;
+    delete process.env.ANTHROPIC_API_BASE_URL;
+    assert.equal(getProviderLabel({ model: { id: 'claude-3-5-sonnet-20241022' } }), null);
+  } finally {
+    restoreEnvVar('ANTHROPIC_BASE_URL', savedBase);
+    restoreEnvVar('ANTHROPIC_API_BASE_URL', savedApiBase);
+  }
+});
+
+test('getProviderLabel prefers Bedrock over MiniMax when model ID is bedrock pattern', () => {
+  const saved = process.env.ANTHROPIC_BASE_URL;
+  try {
+    process.env.ANTHROPIC_BASE_URL = 'https://api.minimaxi.com/v1';
+    assert.equal(getProviderLabel({ model: { id: 'anthropic.claude-3-5-sonnet-20240620-v1:0' } }), 'Bedrock');
+  } finally {
+    restoreEnvVar('ANTHROPIC_BASE_URL', saved);
+  }
+});
+
 test('parseTranscript aggregates tools, agents, and todos', async () => {
   const fixturePath = fileURLToPath(new URL('./fixtures/transcript-basic.jsonl', import.meta.url));
   const result = await parseTranscript(fixturePath);

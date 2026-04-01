@@ -16,7 +16,7 @@ export function renderUsageLine(ctx: RenderContext): string | null {
     return null;
   }
 
-  if (getProviderLabel(ctx.stdin)) {
+  if (getProviderLabel(ctx.stdin) === 'Bedrock') {
     return null;
   }
 

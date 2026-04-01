@@ -2,8 +2,8 @@
 
 A Claude Code plugin that shows what's happening — context usage, active tools, running agents, and todo progress. Always visible below your input.
 
-[![License](https://img.shields.io/github/license/jarrodwatts/claude-hud?v=2)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/jarrodwatts/claude-hud)](https://github.com/jarrodwatts/claude-hud/stargazers)
+[![License](https://img.shields.io/github/license/Shakyae/claude-hud?v=2)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/Shakyae/claude-hud)](https://github.com/Shakyae/claude-hud/stargazers)
 
 ![Claude HUD in action](claude-hud-preview-5-2.png)
 
@@ -13,7 +13,7 @@ Inside a Claude Code instance, run the following commands:
 
 **Step 1: Add the marketplace**
 ```
-/plugin marketplace add jarrodwatts/claude-hud
+/plugin marketplace add Shakyae/claude-hud
 ```
 
 **Step 2: Install the plugin**
@@ -292,7 +292,7 @@ To disable, set `display.showUsage` to `false`.
 ## Development
 
 ```bash
-git clone https://github.com/jarrodwatts/claude-hud
+git clone https://github.com/Shakyae/claude-hud
 cd claude-hud
 npm ci && npm run build
 npm test
@@ -310,4 +310,4 @@ MIT — see [LICENSE](LICENSE)
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=jarrodwatts/claude-hud&type=Date)](https://star-history.com/#jarrodwatts/claude-hud&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Shakyae/claude-hud&type=Date)](https://star-history.com/#Shakyae/claude-hud&Date)

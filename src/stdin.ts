@@ -111,9 +111,19 @@ export function isBedrockModelId(modelId?: string): boolean {
   return normalized.includes('anthropic.claude-');
 }
 
+function isMinimaxEndpoint(): boolean {
+  const baseUrl = process.env.ANTHROPIC_BASE_URL?.trim() || process.env.ANTHROPIC_API_BASE_URL?.trim();
+  if (!baseUrl) return false;
+  const lower = baseUrl.toLowerCase();
+  return lower.includes('minimaxi') || lower.includes('minimax');
+}
+
 export function getProviderLabel(stdin: StdinData): string | null {
   if (isBedrockModelId(stdin.model?.id)) {
     return 'Bedrock';
+  }
+  if (isMinimaxEndpoint()) {
+    return 'MiniMax';
   }
   return null;
 }
