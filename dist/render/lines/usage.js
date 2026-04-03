@@ -29,7 +29,7 @@ export function renderUsageLine(ctx) {
         return null;
     }
     const usageBarEnabled = display?.usageBarEnabled ?? true;
-    const sevenDayThreshold = display?.sevenDayThreshold ?? 50;
+    const sevenDayThreshold = display?.sevenDayThreshold ?? 80;
     const barWidth = getAdaptiveBarWidth();
     if (fiveHour === null && sevenDay !== null) {
         const weeklyOnlyPart = formatUsageWindowPart({

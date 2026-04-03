@@ -115,7 +115,7 @@ export const DEFAULT_CONFIG: HudConfig = {
     showMemoryUsage: false,
     autocompactBuffer: 'enabled',
     usageThreshold: 0,
-    sevenDayThreshold: 50,
+    sevenDayThreshold: 80,
     environmentThreshold: 0,
     customLine: '',
   },
