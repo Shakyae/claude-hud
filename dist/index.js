@@ -7,12 +7,14 @@ import { loadConfig } from './config.js';
 import { parseExtraCmdArg, runExtraCmd } from './extra-cmd.js';
 import { getClaudeCodeVersion } from './version.js';
 import { getMemoryUsage } from './memory.js';
+import { getUsage } from './usage-api.js';
 import { fileURLToPath } from 'node:url';
 import { realpathSync } from 'node:fs';
 export async function main(overrides = {}) {
     const deps = {
         readStdin,
         getUsageFromStdin,
+        getUsage,
         parseTranscript,
         countConfigs,
         getGitStatus,
@@ -44,10 +46,19 @@ export async function main(overrides = {}) {
         const gitStatus = config.gitStatus.enabled
             ? await deps.getGitStatus(stdin.cwd)
             : null;
-        // Usage comes only from Claude Code's official stdin rate_limits fields.
+        // Usage data: MiniMax uses getUsage() from usage-api, others use stdin rate_limits
         let usageData = null;
         if (config.display.showUsage !== false) {
-            usageData = deps.getUsageFromStdin(stdin);
+            // Check if MiniMax endpoint is configured
+            const { isMinimaxEndpoint } = await import('./usage-api.js');
+            if (isMinimaxEndpoint()) {
+                // MiniMax: fetch usage from MiniMax API
+                usageData = await deps.getUsage();
+            }
+            else {
+                // Official Claude: use stdin rate_limits
+                usageData = deps.getUsageFromStdin(stdin);
+            }
         }
         const extraCmd = deps.parseExtraCmdArg();
         const extraLabel = extraCmd ? await deps.runExtraCmd(extraCmd) : null;

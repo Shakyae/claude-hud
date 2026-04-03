@@ -51,10 +51,15 @@ export interface TodoItem {
     status: 'pending' | 'in_progress' | 'completed';
 }
 export interface UsageData {
+    planName?: string;
     fiveHour: number | null;
     sevenDay: number | null;
     fiveHourResetAt: Date | null;
     sevenDayResetAt: Date | null;
+    /** Indicates the API call failed and usage data may be stale */
+    apiUnavailable?: boolean;
+    /** Error code string if API call failed */
+    apiError?: string;
 }
 export interface MemoryInfo {
     totalBytes: number;

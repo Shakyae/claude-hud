@@ -11,7 +11,7 @@ export function renderUsageLine(ctx) {
     if (!ctx.usageData) {
         return null;
     }
-    if (getProviderLabel(ctx.stdin)) {
+    if (getProviderLabel(ctx.stdin) === 'Bedrock') {
         return null;
     }
     const usageLabel = label('Usage', colors);

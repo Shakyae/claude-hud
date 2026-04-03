@@ -1,4 +1,3 @@
-import * as https from 'https';
 import type { UsageData } from './types.js';
 export type { UsageData } from './types.js';
 interface UsageApiResponse {
@@ -14,7 +13,6 @@ interface UsageApiResponse {
 interface UsageApiResult {
     data: UsageApiResponse | null;
     error?: string;
-    /** Retry-After header value in seconds (from 429 responses) */
     retryAfterSec?: number;
 }
 export declare const USAGE_API_USER_AGENT = "claude-code/2.1";
@@ -31,35 +29,20 @@ export type UsageApiDeps = {
         subscriptionType: string;
     } | null;
     ttls: CacheTtls;
+    fetchMiniMaxApi?: (apiKey: string) => Promise<UsageApiResult>;
 };
+/**
+ * Check if the configured base URL points to a MiniMax endpoint.
+ */
+export declare function isMinimaxEndpoint(env?: NodeJS.ProcessEnv): boolean;
 /**
  * Get OAuth usage data from Anthropic API.
  * Returns null if user is an API user (no OAuth credentials) or credentials are expired.
  * Returns { apiUnavailable: true, ... } if API call fails (to show warning in HUD).
  *
- * Uses file-based cache since HUD runs as a new process each render (~300ms).
- * Cache TTL is configurable via usage.cacheTtlSeconds / usage.failureCacheTtlSeconds in config.json
- * (defaults: 60s for success, 15s for failures).
+ * Uses in-memory cache since HUD runs as a new process each render (~300ms).
  */
 export declare function getUsage(overrides?: Partial<UsageApiDeps>): Promise<UsageData | null>;
-/**
- * Determine the macOS Keychain service name for Claude Code credentials.
- * Claude Code uses the default service for ~/.claude and a hashed suffix for custom config directories.
- */
-export declare function getKeychainServiceName(configDir: string, homeDir: string): string;
-export declare function getKeychainServiceNames(configDir: string, homeDir: string, env?: NodeJS.ProcessEnv): string[];
-export declare function resolveKeychainCredentials(serviceNames: string[], now: number, loadService: (serviceName: string, accountName?: string) => string, accountName?: string | null): {
-    credentials: {
-        accessToken: string;
-        subscriptionType: string;
-    } | null;
-    shouldBackoff: boolean;
-};
-export declare function getUsagePlanNameFallback(homeDir?: string): string | null;
 export declare function getUsageApiTimeoutMs(env?: NodeJS.ProcessEnv): number;
-export declare function isNoProxy(hostname: string, env?: NodeJS.ProcessEnv): boolean;
-export declare function getProxyUrl(hostname: string, env?: NodeJS.ProcessEnv): URL | null;
-export declare function getProxyTunnelRejectUnauthorized(rejectUnauthorized: https.RequestOptions['rejectUnauthorized'], env?: NodeJS.ProcessEnv): boolean;
-export declare function parseRetryAfterSeconds(raw: string | string[] | undefined, nowMs?: number): number | undefined;
-export declare function clearCache(homeDir?: string): void;
+export declare function clearCache(_homeDir?: string): void;
 //# sourceMappingURL=usage-api.d.ts.map

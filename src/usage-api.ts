@@ -192,7 +192,7 @@ function fetchMiniMaxUsage(apiKey: string): Promise<UsageApiResult> {
 
           const weeklyTotal = entry.weekly_total_count ?? 0;
           const weeklyUnused = entry.current_weekly_usage_count ?? 0;
-          const sevenDayUtil = weeklyTotal > 0 ? ((weeklyTotal - weeklyUnused) / weeklyTotal) * 100 : 0;
+          const sevenDayUtil = weeklyTotal > 0 ? ((weeklyTotal - weeklyUnused) / weeklyTotal) * 100 : undefined;
           const weeklyResetMs = entry.weekly_remains_time;
           const sevenDayResetAt = (weeklyResetMs != null && weeklyResetMs > 0)
             ? new Date(Date.now() + weeklyResetMs).toISOString()
