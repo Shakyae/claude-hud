@@ -2,6 +2,33 @@
 
 A Claude Code plugin that shows what's happening — context usage, active tools, running agents, and todo progress. Always visible below your input.
 
+---
+
+## About This Fork
+
+This is a fork of [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) with the following enhancements:
+
+### MiniMax Usage Support
+
+This fork adds **native MiniMax usage tracking support**. When using MiniMax as your API provider (via `ANTHROPIC_BASE_URL` pointing to `minimaxi.com`), the HUD will display your MiniMax plan usage including:
+
+- **5-hour window** usage (e.g., `Usage ██░░░░░░░░ 11% (resets in 2h 4m)`)
+- **7-day window** usage when above threshold
+
+**Requirements for MiniMax usage display:**
+- Configure MiniMax endpoint via `ANTHROPIC_BASE_URL` (e.g., `https://api.minimaxi.com/anthropic`)
+- Set `ANTHROPIC_AUTH_TOKEN` with your MiniMax API key
+- Usage shows **remaining/unused** quota percentage
+
+**How it works:**
+- Detects MiniMax endpoint via `ANTHROPIC_BASE_URL` containing `minimax` or `minimaxi`
+- Fetches usage data from MiniMax API (`/v1/api/openplatform/coding_plan/remains`)
+- Supports three-tier API key fallback: `ANTHROPIC_AUTH_TOKEN` → `ANTHROPIC_API_KEY` → `settings.json env.ANTHROPIC_AUTH_TOKEN`
+
+---
+
+
+
 [![License](https://img.shields.io/github/license/Shakyae/claude-hud?v=2)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/Shakyae/claude-hud)](https://github.com/Shakyae/claude-hud/stargazers)
 

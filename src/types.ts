@@ -57,10 +57,15 @@ export interface TodoItem {
 }
 
 export interface UsageData {
+  planName?: string;  // e.g., 'MiniMax' for MiniMax usage
   fiveHour: number | null;  // 0-100 percentage, null if unavailable
   sevenDay: number | null;  // 0-100 percentage, null if unavailable
   fiveHourResetAt: Date | null;
   sevenDayResetAt: Date | null;
+  /** Indicates the API call failed and usage data may be stale */
+  apiUnavailable?: boolean;
+  /** Error code string if API call failed */
+  apiError?: string;
 }
 
 export interface MemoryInfo {

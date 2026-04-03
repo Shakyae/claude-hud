@@ -7,6 +7,7 @@ import { loadConfig } from './config.js';
 import { parseExtraCmdArg, runExtraCmd } from './extra-cmd.js';
 import { getClaudeCodeVersion } from './version.js';
 import { getMemoryUsage } from './memory.js';
+import { getUsage } from './usage-api.js';
 import type { RenderContext } from './types.js';
 import { fileURLToPath } from 'node:url';
 import { realpathSync } from 'node:fs';
@@ -14,6 +15,7 @@ import { realpathSync } from 'node:fs';
 export type MainDeps = {
   readStdin: typeof readStdin;
   getUsageFromStdin: typeof getUsageFromStdin;
+  getUsage: typeof getUsage;
   parseTranscript: typeof parseTranscript;
   countConfigs: typeof countConfigs;
   getGitStatus: typeof getGitStatus;
@@ -31,6 +33,7 @@ export async function main(overrides: Partial<MainDeps> = {}): Promise<void> {
   const deps: MainDeps = {
     readStdin,
     getUsageFromStdin,
+    getUsage,
     parseTranscript,
     countConfigs,
     getGitStatus,
@@ -68,10 +71,18 @@ export async function main(overrides: Partial<MainDeps> = {}): Promise<void> {
       ? await deps.getGitStatus(stdin.cwd)
       : null;
 
-    // Usage comes only from Claude Code's official stdin rate_limits fields.
+    // Usage data: MiniMax uses getUsage() from usage-api, others use stdin rate_limits
     let usageData: RenderContext['usageData'] = null;
     if (config.display.showUsage !== false) {
-      usageData = deps.getUsageFromStdin(stdin);
+      // Check if MiniMax endpoint is configured
+      const { isMinimaxEndpoint } = await import('./usage-api.js');
+      if (isMinimaxEndpoint()) {
+        // MiniMax: fetch usage from MiniMax API
+        usageData = await deps.getUsage();
+      } else {
+        // Official Claude: use stdin rate_limits
+        usageData = deps.getUsageFromStdin(stdin);
+      }
     }
 
     const extraCmd = deps.parseExtraCmdArg();
