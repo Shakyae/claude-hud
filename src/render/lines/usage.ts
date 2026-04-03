@@ -39,7 +39,7 @@ export function renderUsageLine(ctx: RenderContext): string | null {
   }
 
   const usageBarEnabled = display?.usageBarEnabled ?? true;
-  const sevenDayThreshold = display?.sevenDayThreshold ?? 80;
+  const sevenDayThreshold = display?.sevenDayThreshold ?? 50;
   const barWidth = getAdaptiveBarWidth();
 
   if (fiveHour === null && sevenDay !== null) {

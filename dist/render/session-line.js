@@ -161,7 +161,7 @@ export function renderSessionLine(ctx) {
                         usageBarEnabled,
                         barWidth,
                     });
-                    const sevenDayThreshold = display?.sevenDayThreshold ?? 80;
+                    const sevenDayThreshold = display?.sevenDayThreshold ?? 50;
                     if (sevenDay !== null && sevenDay >= sevenDayThreshold) {
                         const sevenDayPart = formatUsageWindowPart({
                             label: '7d',
